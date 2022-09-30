@@ -1,0 +1,78 @@
+{% extends "mainlayout.html" %}
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block main %}
+
+    <div class="section">
+        <div class="row mx-1">
+            
+            <!-- MENU Left hand side  -->
+            <div class="col-7">
+                <h3 class="pb-3 ms-2"> Menu </h3>
+                <div class="scroll shadow rounded p-1">
+                    <table class="table">
+                        <tbody>
+                            {% for item in menu %}
+                            <tr>
+                                <td>{{ item["Name"] }} </td>
+                                <td>{{ "£%.2f"|format(item["Price"]/100) }}</td>
+                                <td>
+                                    <div class="d-flex flex-row-reverse">
+                                        <a class="btn btn-primary btn-sm" data-bs-toggle="offcanvas" href="/customise">+</button>
+                                        
+                                            <!-- Customisation menu -->
+                                            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                                                <div class="offcanvas-header">
+                                                  <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                                                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                </div>
+                                                <div class="offcanvas-body">
+                                                  <div>
+                                                    Some text as placeholder.
+                                                  </div>
+                                                  <form action="/addbasket" method="post">
+                                                    <input type="hidden" id="addbasket" name="addbasket" value="{{ item['id'] }}"> 
+                                                    <button type="submit" class="btn btn-primary btn-sm">+</button>
+                                                </form>    
+                                                </div>
+                                              </div>
+
+  
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+            <!-- ORDER SUMMARY Right hand side -->
+            <div class="col-5">
+                <h3 class="pb-3 ms-2"> Your order   <i class="bi bi-cart"></i> </h3>
+                <div class="scroll shadow rounded p-1">
+                    <ul class="list-group list-group-flush">
+                        {% for item in basket %}
+                        <li class="d-flex list-group-item">
+                            <div class="flex-fill">{{ item["Name"] }}</div> 
+                            <div> {{ "£%.2f"|format(item["Price"]/100) }} </div>
+                            <div>
+                                <form action="/removebasket" method="post">
+                                    <input type="hidden" id="basketremove" name="basketremove" value="{{ item['basket_id'] }}">                                 
+                                    <button class="btn btn-link ms-1 p-0" type="submit"> <h5><i class="bi bi-dash-circle ps-1"></i></h5> </button>
+                                </form> 
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

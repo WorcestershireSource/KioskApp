@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="initial-scale=1, width=device-width">
+      <!-- To allow full screen on ipad-->
+      <meta name=”apple-mobile-web-app-capable” content=”yes “>
+
+      <!-- http://getbootstrap.com/docs/5.1/ -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
+      <link href="/static/styles.css" rel="stylesheet">
+
+      <title>Kiosk App</title>
+
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    
+
+
+    <!-- HEADER -->
+    <div class="d-flex bg-primary p-2 flex-row-reverse">
+      <div><a class="nav-link rounded my-auto pe-2 pt-2 text-light" href="/cancel"><h6>Cancel order  <i class="bi bi-x-square-fill ps-1"></i></h6></a></div>
+    </div>
+    
+    <!-- MAIN BODY - TEMPLATED -->
+    <main class="container-fluid pt-3">
+        {% block main %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto text-center text-lg-start bg-light text-grey">
+        <div class="text-center" style="background-color: white">
+          <div class="d-flex flex-row-reverse">
+            <div class="ps-3">
+              <a href="/checkout"><button type="button" class="btn btn-primary btn-lg p-2 m-0 rounded-0">
+                <h1 class="px-3">Pay <i class="bi bi-credit-card ps-1"></i></h1> 
+              </button></a>
+            </div>
+            <div><h1 class="pt-2"> Total: £{{ total }} </h1></div>
+          </div>
+        </div>
+    </footer>
+
+
+  </body>
+</html>

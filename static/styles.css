@@ -1,0 +1,9 @@
+/* Size for brand */
+body {
+    overflow-y:hidden;
+  }
+
+  .scroll {
+    height: 400px;
+    overflow: scroll;
+  }
