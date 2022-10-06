@@ -1,9 +1,24 @@
 /* Size for brand */
 body {
-    overflow-y:hidden;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
 
-  .scroll {
-    height: 400px;
+  .LHS {
+    height: 750px;
     overflow: scroll;
+    font-size: 1.7rem;
   }
+
+  .RHS {
+    height: 750px;
+    overflow: scroll;
+    font-size: 1.4rem;
+  }
+
+  .pay {
+    font-size: 2.7rem;
+  }
+

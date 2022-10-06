@@ -2,10 +2,11 @@
 from square.client import Client
 import os
 import uuid
+import time
 
 
 # Access token needed: add in terminal: export SQUARE_ACCESS_TOKEN=EAAAEAY2ifebRBl5JPP4VOZt1cDGFSeQQOhKD9SLjTSNwhoxxnJMOzRPhYXyXDmy
-# Rename sandbox to 'production' and change token when ready
+# Rename sandbox to 'production' and change token when ready 
 client = Client(
     access_token=os.environ['SQUARE_ACCESS_TOKEN'],
     environment='sandbox')
@@ -26,6 +27,9 @@ def check_out(basket, total, idempotency_key):
   # Connect to the terminal and set up an order - funcs below
   device_id = "9fa747a2-25ff-48ee-b078-04381f7c828f"    # connect2terminal(idempotency_key)["device_code"]["id"]
   order_id = create_order(basket)
+
+  # Only for testing - REMOVE FOR PRODUCTION
+  time.sleep(7)
   
   print(order_id)
   # Request a checkout - uses the ID created above: https://developer.squareup.com/docs/terminal-api/square-terminal-payments
@@ -45,8 +49,9 @@ def check_out(basket, total, idempotency_key):
     }
   )
 
+
   if result.is_success():
-    print(result.body)
+    return result.body["checkout"]["id"]
   elif result.is_error():
     print(result.errors)
 
@@ -69,13 +74,13 @@ def fetch_menu():
     # Parse dict object returned by Square and transform into smaller list of dicts
     for i, item in enumerate(raw_menu["objects"]):
       variations = []
-      price = 0
+
       try:
           for variation in item["item_data"]["variations"]:
               variations.append({
+                "id" : variation["id"],
                 "name" : variation["item_variation_data"]["name"],
                 "price" : variation["item_variation_data"]["price_money"]["amount"],
-                "id" : variation["id"]
               })
       except KeyError:
           pass
@@ -84,13 +89,19 @@ def fetch_menu():
       if len(variations) > 0: 
         price = variations[0]["price"]
       else: price = item["item_data"]["price_money"]["amount"]
+      
+      try: 
+        description = item["item_data"]["description_plaintext"]
+      except KeyError: 
+        description = ""
 
       menu.append({
           "id" : item["id"],
-          "Name": item["item_data"]["description_plaintext"],
-          "Price": price,
-          "Variations": variations,
-          "Variation_chosen": []
+          "name": item["item_data"]["name"],
+          "price": price,
+          "variations": variations,
+          "description": description,
+          "variation_chosen": []
       })
 
     # Pass the smaller list of dicts back to the app
@@ -143,7 +154,7 @@ def create_order(basket):
     # Add each item to the order
     order.append({
         "quantity": "1",
-        "catalog_object_id": item["Variations"][0]["id"], # item["id"],
+        "catalog_object_id": item["id"], # item["id"],
         "modifiers": modify,
     })
   
@@ -169,8 +180,17 @@ def create_order(basket):
 
 
 
+def cancel_checkout(id):
+  result = client.terminal.cancel_terminal_checkout(
+    checkout_id = id
+  )
 
-
+  if result.is_success():
+    print(result.body)
+    return 1
+  elif result.is_error():
+    print(result.errors)
+    return 0
 
 
 

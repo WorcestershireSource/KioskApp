@@ -1,9 +1,5 @@
 {% extends "mainlayout.html" %}
 
-{% block title %}
-    Main
-{% endblock %}
-
 {% block main %}
 
     <div class="section">
@@ -11,37 +7,57 @@
             
             <!-- MENU Left hand side  -->
             <div class="col-7">
-                <h3 class="pb-3 ms-2"> Menu </h3>
-                <div class="scroll shadow rounded p-1">
+                <h1 class="pb-3 ms-2"> Menu </h1>
+                <div class="LHS shadow rounded p-1">
                     <table class="table">
                         <tbody>
                             {% for item in menu %}
                             <tr>
-                                <td>{{ item["Name"] }} </td>
-                                <td>{{ "£%.2f"|format(item["Price"]/100) }}</td>
+                                <td>{{ item["name"] }} </td>
+                                <td>{{ "£%.2f"|format(item["price"]/100) }}</td>
                                 <td>
-                                    <div class="d-flex flex-row-reverse">
-                                        <a class="btn btn-primary btn-sm" data-bs-toggle="offcanvas" href="/customise">+</button>
+                                    
+                                    <form action="/addbasket" method="post">
+                                        <input hidden id="addbasket" name="addbasket" value="{{ item['id'] }}"> 
+                                        {% if item["variations"] | length > 1 %}
+                                        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#Modal{{ item['id']}}">+</button>
                                         
-                                            <!-- Customisation menu -->
-                                            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                                                <div class="offcanvas-header">
-                                                  <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-                                                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                        <!-- Pop up window: BS Modal -->
+                                        <div class="modal fade" id="Modal{{ item['id']}}" tabindex="-1" aria-labelledby="ModalLabel{{ item['id']}}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalLabel{{ item['id']}}">{{ item ['name'] }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="offcanvas-body">
-                                                  <div>
-                                                    Some text as placeholder.
-                                                  </div>
-                                                  <form action="/addbasket" method="post">
-                                                    <input type="hidden" id="addbasket" name="addbasket" value="{{ item['id'] }}"> 
-                                                    <button type="submit" class="btn btn-primary btn-sm">+</button>
-                                                </form>    
+                                                    <div class="modal-body">
+                                                        <div class="my-3">
+                                                            <b>Choose from: </b>
+                                                        </div>
+                                                        <div class="btn-group-vertical" role="group" aria-label="Vertical radio toggle button group">
+                                                            <div class="container">
+                                                                {% for subchoice in item["variations"] %}
+                                                                <div class="row justify-content-between">
+                                                                    <div class="col-auto">{{ subchoice["name"] }}</div>
+                                                                    <div class="col-auto pb-3">
+                                                                        <input type="radio" class="btn-check" name="subchoice" value="{{ subchoice['id'] }}" id="{{ subchoice['id'] }}" autocomplete="off">
+                                                                        <label class="btn btn-outline-primary d-flex" for="{{ subchoice['id'] }}"> {{ "£%.2f"|format(subchoice["price"]/100) }} </label>
+                                                                    </div>
+                                                                </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Add to order</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                              </div>
-
-  
-                                    </div>
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-primary btn-lg">+</button>
+                                        {% endif %}
+                                    </form>    
                                 </td>
                             </tr>
                             {% endfor %}
@@ -53,17 +69,17 @@
             
             <!-- ORDER SUMMARY Right hand side -->
             <div class="col-5">
-                <h3 class="pb-3 ms-2"> Your order   <i class="bi bi-cart"></i> </h3>
-                <div class="scroll shadow rounded p-1">
+                <h1 class="pb-3 ms-2"> Your order   <i class="bi bi-cart"></i> </h1>
+                <div class="RHS shadow rounded p-1">
                     <ul class="list-group list-group-flush">
                         {% for item in basket %}
                         <li class="d-flex list-group-item">
-                            <div class="flex-fill">{{ item["Name"] }}</div> 
-                            <div> {{ "£%.2f"|format(item["Price"]/100) }} </div>
+                            <div class="flex-fill">{{ item["name"] }}</div> 
+                            <div> {{ "£%.2f"|format(item["price"]/100) }} </div>
                             <div>
                                 <form action="/removebasket" method="post">
                                     <input type="hidden" id="basketremove" name="basketremove" value="{{ item['basket_id'] }}">                                 
-                                    <button class="btn btn-link ms-1 p-0" type="submit"> <h5><i class="bi bi-dash-circle ps-1"></i></h5> </button>
+                                    <button class="btn btn-link ms-1 p-0" type="submit"> <h3><i class="bi bi-dash-circle ps-1"></i></h3> </button>
                                 </form> 
                             </div>
                         </li>
