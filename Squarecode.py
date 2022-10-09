@@ -2,10 +2,9 @@
 from square.client import Client
 import os
 import uuid
-import time
 
 
-# Access token needed: add in terminal: export SQUARE_ACCESS_TOKEN=EAAAEAY2ifebRBl5JPP4VOZt1cDGFSeQQOhKD9SLjTSNwhoxxnJMOzRPhYXyXDmy
+# Access token needed: add in terminal: export SQUARE_ACCESS_TOKEN=
 # Rename sandbox to 'production' and change token when ready 
 client = Client(
     access_token=os.environ['SQUARE_ACCESS_TOKEN'],
@@ -18,20 +17,15 @@ location_id = "L1G4EVF77D81D"
 
 
 
-
-
-
 # CHECK OUT Need to add input variables and link to front end 
-def check_out(basket, total, idempotency_key):
+def check_out(basket, idempotency_key):
 
   # Connect to the terminal and set up an order - funcs below
-  device_id = "9fa747a2-25ff-48ee-b078-04381f7c828f"    # connect2terminal(idempotency_key)["device_code"]["id"]
-  order_id = create_order(basket)
+  device_id = "9fa747a2-25ff-48ee-b078-04381f7c828f"    # connect2terminal(idempotency_key)
+  # order_id = create_order(basket)
 
-  # Only for testing - REMOVE FOR PRODUCTION
-  time.sleep(7)
+  total = sum(i["price"] for i in basket)
   
-  print(order_id)
   # Request a checkout - uses the ID created above: https://developer.squareup.com/docs/terminal-api/square-terminal-payments
   result = client.terminal.create_terminal_checkout(
     body = {
@@ -41,20 +35,17 @@ def check_out(basket, total, idempotency_key):
           "amount": total,
           "currency": "GBP"
         },
-        "order_id": order_id,
+        # "order_id": order_id,
         "device_options": {
           "device_id": device_id  
         }
       }
     }
   )
-
-
   if result.is_success():
     return result.body["checkout"]["id"]
   elif result.is_error():
     print(result.errors)
-
 
 
 
@@ -69,6 +60,7 @@ def fetch_menu():
   if cat_result.is_success():
     # This is a dict object returned by the Square API 
     raw_menu = cat_result.body
+
     menu = []
 
     # Parse dict object returned by Square and transform into smaller list of dicts
@@ -101,7 +93,6 @@ def fetch_menu():
           "price": price,
           "variations": variations,
           "description": description,
-          "variation_chosen": []
       })
 
     # Pass the smaller list of dicts back to the app
@@ -109,13 +100,6 @@ def fetch_menu():
 
   elif cat_result.is_error():
     print(cat_result.errors)
-
-
-
-
-
-
-
 
 
 
@@ -132,7 +116,7 @@ def connect2terminal(idempotency_key):
   }})
   if result.is_success():
     print(result.body)
-    return result.body
+    return result.body["device_code"]["id"]
   elif result.is_error():
     print(result.errors)
 
@@ -142,24 +126,15 @@ def create_order(basket):
   # Format the items in the basket to a list of dicts for the API
   order = []
   for item in basket:
-    
     #Check which variations have been applied
-    modify = []
-    try:
-      for variation in item["variation_chosen"]:
-          modify.append({"catalogue_object_id": variation})
-    except KeyError:
-      pass
-    
+    item_main_id = item["id"]
+
     # Add each item to the order
     order.append({
         "quantity": "1",
-        "catalog_object_id": item["id"], # item["id"],
-        "modifiers": modify,
+        "catalog_object_id": item_main_id, # item["id"],
+        "modifiers": [],
     })
-  
-  print(order)
-
   # Call API and pass basket/order
   result = client.orders.create_order(
     body = {
@@ -171,7 +146,6 @@ def create_order(basket):
       "idempotency_key": str(uuid.uuid4())
     }
   )
-
   if result.is_success():
     print(result.body)
     return result.body["order"]["id"]
@@ -191,6 +165,9 @@ def cancel_checkout(id):
   elif result.is_error():
     print(result.errors)
     return 0
+
+
+
 
 
 

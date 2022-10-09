@@ -1,8 +1,61 @@
-{% extends "mainlayout.html" %}
+<!DOCTYPE html>
 
-{% block main %}
+<html lang="en">
 
-    <div class="section">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- To allow full screen on ipad-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Kiosk">
+
+    <!-- Bootstrap framework linking http://getbootstrap.com/docs/5.1/ -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
+    <link href="/static/styles.css" rel="stylesheet">
+    
+    <title>Kiosk App</title>
+
+  </head>
+
+
+  <body class="d-flex flex-column min-vh-100">
+
+    <!-- Own Javascript bootstrap and Jquery linking -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='kioskfrontend.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <!-- HEADER -->
+    <div class="d-flex bg-primary p-2 flex-row-reverse">
+      <div><h3 id="cancel" class="my-auto pe-2 py-2 text-light" onclick="clear_basket();">Cancel order  <i class="bi bi-x-square-fill ps-1"></i></h3></div>
+    </div>
+
+    <!-- LAUNCH pop up window - bootstrap 'modal' -->
+    <div class="modal fade " id="launchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title" id="exampleModalLabel">Welcome</h1>
+          </div>
+          <div class="modal-body">
+            <!-- <h2 class="py-5">Please place your order </h2> -->
+            <div class="container-fluid">
+              <div class="d-grid">
+                <button type="button" class="btn py-4 mt-4 mb-2 btn-lg btn-primary" data-bs-dismiss="modal"><h2>Start my order</h2></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <main class="container-fluid pt-3">
+      <div class="section">
         <div class="row mx-1">
             
             <!-- MENU Left hand side  -->
@@ -17,17 +70,16 @@
                                 <td>{{ "£%.2f"|format(item["price"]/100) }}</td>
                                 <td>
                                     
-                                    <form action="/addbasket" method="post">
-                                        <input hidden id="addbasket" name="addbasket" value="{{ item['id'] }}"> 
+                                    <div class="addform">
                                         {% if item["variations"] | length > 1 %}
                                         <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#Modal{{ item['id']}}">+</button>
                                         
-                                        <!-- Pop up window: BS Modal -->
+                                        <!-- SUBCHOICE pop up window: BS Modal -->
                                         <div class="modal fade" id="Modal{{ item['id']}}" tabindex="-1" aria-labelledby="ModalLabel{{ item['id']}}" aria-hidden="true">
-                                            <div class="modal-dialog">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalLabel{{ item['id']}}">{{ item ['name'] }}</h5>
+                                                <h1 class="modal-title" id="ModalLabel{{ item['id']}}">{{ item ['name'] }}</h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                     <div class="modal-body">
@@ -40,24 +92,27 @@
                                                                 <div class="row justify-content-between">
                                                                     <div class="col-auto">{{ subchoice["name"] }}</div>
                                                                     <div class="col-auto pb-3">
-                                                                        <input type="radio" class="btn-check" name="subchoice" value="{{ subchoice['id'] }}" id="{{ subchoice['id'] }}" autocomplete="off">
-                                                                        <label class="btn btn-outline-primary d-flex" for="{{ subchoice['id'] }}"> {{ "£%.2f"|format(subchoice["price"]/100) }} </label>
+                                                                        <input type="radio" class="variationRadio btn-check" value="{{ subchoice }}" id="{{ subchoice['id'] }}" autocomplete="off">
+                                                                        <label class="btn btn-outline-primary btn-lg d-flex" for="{{ subchoice['id'] }}"> {{ "£%.2f"|format(subchoice["price"]/100) }} </label>
                                                                     </div>
                                                                 </div>
                                                                 {% endfor %}
                                                             </div>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-primary">Add to order</button>
+                                                        <div class="container-fluid">
+                                                          <input hidden id="mainChoice" value="{{ item['id'] }}">
+                                                          <div class="d-grid">
+                                                            <button type="button" class="addSubmitVariation btn mt-5 btn-lg btn-primary" data-bs-dismiss="modal"><h2>Add to order</h2></button>
+                                                          </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         {% else %}
-                                            <button type="submit" class="btn btn-primary btn-lg">+</button>
+                                          <button class="addSubmitSingle btn btn-primary btn-lg" value="{{ item }}">+</button>
                                         {% endif %}
-                                    </form>    
+                                      </div>    
                                 </td>
                             </tr>
                             {% endfor %}
@@ -71,24 +126,49 @@
             <div class="col-5">
                 <h1 class="pb-3 ms-2"> Your order   <i class="bi bi-cart"></i> </h1>
                 <div class="RHS shadow rounded p-1">
-                    <ul class="list-group list-group-flush">
-                        {% for item in basket %}
-                        <li class="d-flex list-group-item">
-                            <div class="flex-fill">{{ item["name"] }}</div> 
-                            <div> {{ "£%.2f"|format(item["price"]/100) }} </div>
-                            <div>
-                                <form action="/removebasket" method="post">
-                                    <input type="hidden" id="basketremove" name="basketremove" value="{{ item['basket_id'] }}">                                 
-                                    <button class="btn btn-link ms-1 p-0" type="submit"> <h3><i class="bi bi-dash-circle ps-1"></i></h3> </button>
-                                </form> 
-                            </div>
-                        </li>
-                        {% endfor %}
+                    <ul id="basket" class="list-group list-group-flush">
+                      <!-- JS adds basket items here -->
                     </ul>
                 </div>
             </div>
         </div>
-    </div>
+      </div>
+    </main>
 
-{% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="mt-auto text-center text-lg-start bg-light text-grey">
+        <div class="text-center" style="background-color: white">
+          <div class="d-flex flex-row-reverse">
+            <div class="ps-3">
+              <button type="submit" class="btn btn-primary btn-lg m-0 rounded-0" onclick="checkout();" data-bs-toggle="modal" data-bs-target="#payModal">
+                <p class="pay pt-1 px-2">Pay <i class="bi bi-credit-card ps-1"></i></p> 
+              </button>
+            
+              <!-- Pop up modal for payment -->
+              <div id="payModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title">Please pay</h1>
+                    </div>
+                    <div class="modal-body">
+                      <div class="spinner-grow text-primary p-5" style="width: 10rem; height: 10rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-lg btn-danger" onclick="cancelOrder();" data-bs-dismiss="modal"><h2>Cancel payment</h2></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div><p id="total" class="pay pt-3"> Total: £0.00<!-- filled by JS--> </p></div>
+          </div>
+        </div>
+    </footer>
+  </body>
+</html>
 
