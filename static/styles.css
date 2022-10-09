@@ -7,18 +7,22 @@ body {
   }
 
   .LHS {
-    height: 750px;
+    height: 725px;
     overflow: scroll;
     font-size: 1.7rem;
   }
 
   .RHS {
-    height: 750px;
+    height: 725px;
     overflow: scroll;
     font-size: 1.4rem;
   }
 
   .pay {
     font-size: 2.7rem;
+  }
+
+  .vertcenter {
+    vertical-align: middle;
   }
 
