@@ -8,7 +8,7 @@ It relies on an API with the payment provider 'Square'.
 The application is based on a HMTL/CSS and Java front end. It uses JQuery and Ajax for a responsive experience
 It uses a python/flask backend, which controls the communication with the payment provider, Square.
 
-## Purpose
+## Purpose:
 This app should allow a small shop to set up a self-service kiosk which will reduce the amount of staffing resource needed to run the shop.
 Existing kiosk solutions are expensive and not commonly available in smaller shops. 
 
@@ -19,7 +19,7 @@ When the customer is ready to pay, the order is posted the server with Ajax and 
 The user can pay using the square terminal - details of their payment are processed by Square and not passed through the kiosk app for security
 An walkthrough of the process is available here: https://youtu.be/r4SIV6AEF-Y
 
-## Learning
+## Learning outcomes:
 I initially developed the application relying heavily on flask to track the users order, but this resulted in a slower user experience. 
 To complete this project I therefore had to learn more about Javascript. I used the CS50 web development lectures and further online training including learning to use JQuery and AJax to ensure the site was responsive.
 I used the bootstrap framework to ensure the application displayed correctly in full screen view.
@@ -28,7 +28,7 @@ Using the Square APIs was challenging and was the first time I'd had to follow t
 sandbox test environment provided excellent tools for testing and debugging the application. 
 I made an initial mock up in Swift UI, but decided these languages would allow more flexibility in deployment hardware/tablets. 
 
-## Useful commands:
+## Useful commands:
 python -m flask --debug run             Start a Flask session
 export SQUARE_ACCESS_TOKEN=     Include the correct token for Square to work - get it from the developer dashboard below
 source .venv/bin/activate       Start the virtual environment
