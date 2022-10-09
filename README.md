@@ -19,6 +19,13 @@ When the customer is ready to pay, the order is posted the server with Ajax and 
 The user can pay using the square terminal - details of their payment are processed by Square and not passed through the kiosk app for security
 An walkthrough of the process is available here: https://youtu.be/r4SIV6AEF-Y
 
+## Files used
+Index.html - the main page of the application
+App.py - the main flask app 
+Squarecode.py - APIs to connect the application to the payment provider e.g. sending order details for payment
+styles.css - additional CSS used where bootstrap wasn't sufficient
+kioskfrontend.js - the javascript logic to manage the user experience e.g. tracking what is in the user's basket
+
 ## Learning outcomes:
 I initially developed the application relying heavily on flask to track the users order, but this resulted in a slower user experience. 
 To complete this project I therefore had to learn more about Javascript. I used the CS50 web development lectures and further online training including learning to use JQuery and AJax to ensure the site was responsive.
@@ -29,9 +36,14 @@ sandbox test environment provided excellent tools for testing and debugging the 
 I made an initial mock up in Swift UI, but decided these languages would allow more flexibility in deployment hardware/tablets. 
 
 ## Useful commands:
-python -m flask --debug run             Start a Flask session
-export SQUARE_ACCESS_TOKEN=     Include the correct token for Square to work - get it from the developer dashboard below
-source .venv/bin/activate       Start the virtual environment
+python -m flask --debug run             
+Start a Flask session
+
+export SQUARE_ACCESS_TOKEN=     
+Include the correct token for Square to work - get it from the developer dashboard below
+
+source .venv/bin/activate       
+Start the virtual environment
 
 ## Useful links:
 Sign into Square Developer dashboard: https://developer.squareup.com/
