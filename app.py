@@ -1,21 +1,11 @@
-import os
 import uuid
-
-from flask import Flask, redirect, jsonify, render_template, request
-from flask_session import Session
+from flask import Flask, jsonify, render_template, request
 from Squarecode import fetch_menu, check_out, cancel_checkout
-
-from robotinstructions import make_drink
 
 app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-# Configure session to use filesystem (instead of signed cookies)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
 
 # GLOBALS Menu is a list of dicts built in squarecode.py
 menu = fetch_menu()
@@ -47,4 +37,4 @@ def checkout():
 @app.route("/cancelchkout", methods=["GET"])
 def cancelchkout():
     cancel_checkout(checkout_id)
-    return redirect("/")
+    return jsonify({"processed": "true"})
