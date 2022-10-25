@@ -9,7 +9,7 @@ It relies on an API with the payment provider 'Square'.
 The application is based on a HMTL/CSS and Javascript front end. It uses JQuery and Ajax for a responsive experience.
 It uses a python/flask backend, which controls the communication with the payment provider: Square.
 
-## Purpose
+## Purpose
 This app should allow a small shop to set up a self-service kiosk which will reduce the staffing resource needed to run the shop.
 
 Existing kiosk solutions are expensive and not commonly available in smaller shops. 
