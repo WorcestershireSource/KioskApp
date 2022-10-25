@@ -50,9 +50,13 @@ kioskfrontend.js - the javascript logic to manage the user experience e.g. track
 
 ## Learning outcomes:
 I initially developed the application relying heavily on flask to track the users order, but this resulted in a slower user experience. 
+
 To complete this project I therefore had to learn more about Javascript. I used the CS50 web development lectures and further online training including learning to use JQuery and AJax to ensure the site was responsive.
+
 I used the bootstrap framework to ensure the application displayed correctly in full screen view.
+
 I learned to use more of the tools in the Chrome Developer tool to debug my application and to check its appearance on different devices. 
-Using the Square APIs was challenging and was the first time I'd had to follow that kind of developer documentation. Their developer dashboards and 
-sandbox test environment provided excellent tools for testing and debugging the application. 
+
+Using the Square APIs was challenging and was the first time I'd had to follow that kind of developer documentation. Their developer dashboards and sandbox test environment provided excellent tools for testing and debugging the application. 
+
 I made an initial mock up in Swift UI, but decided these languages would allow more flexibility in deployment hardware/tablets. 
