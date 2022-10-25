@@ -25,7 +25,8 @@ The user can pay using the square terminal - details of their payment are proces
 
 *Image: click on the image for a video walkthrough of the app*
 
-## Useful commands:
+
+## Useful commands:
 - python -m flask --debug run             *Start a Flask session*
 - export SQUARE_ACCESS_TOKEN=     *Include the correct token for Square to work - get it from the developer dashboard below*
 - source .venv/bin/activate       *Start the virtual environment*
