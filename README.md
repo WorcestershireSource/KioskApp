@@ -20,9 +20,9 @@ The backend requests the shop's inventory from Square - this is passed to the fr
 The customer selects their purchases - this is handled in the front end to ensure a responsive interface.
 When the customer is ready to pay, the order is posted to the server and the app uses a Square API to initiate a payment with a Square 'terminal': a credit/debit card reader.
 The user can pay using the square terminal - details of their payment are processed by Square and not passed through the kiosk app for security.
-A walkthrough of the process is available here: 
 
-[![alt text](https://img.youtube.com/vi/r4SIV6AEF-Y/0.jpg)] (https://www.youtube.com/watch?v=r4SIV6AEF-Y)]
+[![alt text](https://img.youtube.com/vi/r4SIV6AEF-Y/0.jpg)](https://www.youtube.com/watch?v=r4SIV6AEF-Y)]
+*Image: click on the image for a video walkthrough of the app*
 
 ## Useful commands:
 - python -m flask --debug run             *Start a Flask session*
