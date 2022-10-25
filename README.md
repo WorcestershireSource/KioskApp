@@ -43,9 +43,13 @@ The user can pay using the square terminal - details of their payment are proces
 
 ## Files used
 Index.html - the main page of the application
-App.py - the main flask app 
+
+App.py - the main flask app
+
 Squarecode.py - APIs to connect the application to the payment provider e.g. sending order details for payment
+
 styles.css - additional CSS used where bootstrap wasn't sufficient
+
 kioskfrontend.js - the javascript logic to manage the user experience e.g. tracking what is in the user's basket
 
 ## Learning outcomes:
